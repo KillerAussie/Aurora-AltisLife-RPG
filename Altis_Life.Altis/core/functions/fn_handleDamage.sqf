@@ -15,12 +15,13 @@ params [
     ["_index",0,[0]]
 ];
 
+private _originalDamage = if (_part == "") then {damage _unit}else{_unit getHit _part};
 //Handle the tazer first (Top-Priority).
 if (!isNull _source) then {
     if (_source != _unit) then {
         if (currentWeapon _source in ["hgun_P07_snds_F","arifle_SDAR_F"] && _projectile in ["B_9x21_Ball","B_556x45_dual"]) then {
             if (side _source isEqualTo west && playerSide isEqualTo civilian) then {
-                _damage = 0;
+                _damage = _originalDamage;
                 if (alive player && !life_istazed && !life_isknocked && !(_unit getVariable ["restrained",false])) then {
                     private ["_distance"];
                     _distance = 35;
@@ -40,7 +41,7 @@ if (!isNull _source) then {
 
             //Temp fix for super tasers on cops.
             if (side _source isEqualTo west && (playerSide isEqualTo west || playerSide isEqualTo independent)) then {
-                _damage = 0;
+                _damage = _originalDamage;
             };
         };
     };
